@@ -62,13 +62,25 @@ with tab1:
 
     if df.empty:
         st.info("No tasks available")
+
     else:
         schedule = schedule_tasks(df)
 
         if schedule:
-            st.table(pd.DataFrame(schedule))
-        else:
-            st.warning("No schedule could be generated")
+            schedule_df = pd.DataFrame(schedule)
+            st.table(schedule_df)
+
+            st.markdown("### ✅ Mark Task as Completed")
+
+            task_to_complete = st.selectbox(
+                "Select task",
+                df["task_name"].tolist()
+            )
+
+            if st.button("Mark Completed"):
+                update_task_status(task_to_complete, "completed")
+                st.success(f"{task_to_complete} marked as completed!")
+                st.rerun()
 
 
 # =========================
